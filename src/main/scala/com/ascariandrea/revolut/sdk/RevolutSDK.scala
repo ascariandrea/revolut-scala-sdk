@@ -1,8 +1,9 @@
 package com.ascariandrea.revolut.sdk
 
+import akka.http.scaladsl.model.Uri
+import akka.http.scaladsl.model.Uri.{Path}
 import models.Config
 import client.Client
-import okhttp3.HttpUrl
 
 class RevolutSDK(config: Config) {
 
@@ -11,13 +12,9 @@ class RevolutSDK(config: Config) {
     if (config.sandbox) "sandbox-b2b.revolut.com"
     else "b2b.revolut.com"
 
-  private val apiUrl = new HttpUrl.Builder()
-    .scheme("https")
-    .host(host)
-    .addPathSegment("api")
-    .build()
+  val baseUrl = Uri(host).withScheme("https").withPath(Path("api"))
 
-  val client: Client = new Client(apiUrl)
+  val client: Client = new Client(baseUrl)
 
   val accounts = new Accounts(this.client)
 }

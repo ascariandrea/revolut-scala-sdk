@@ -1,58 +1,58 @@
 package com.ascariandrea.revolut.sdk
 package client
 
-import java.io.IOException
-import java.util.concurrent.CompletableFuture
+import akka.actor.ActorSystem
+import akka.http.scaladsl.model.Uri.Path
+import akka.http.scaladsl.model.{HttpResponse, StatusCodes, Uri}
+import akka.http.scaladsl.{Http, model}
+import akka.stream.ActorMaterializer
+import io.circe.Decoder
 
-import okhttp3.HttpUrl.Builder
-import okhttp3.{HttpUrl, OkHttpClient, Request, Response}
-import spray.json._
+import scala.concurrent.Future
+import io.circe.parser._
 
-class Client(httpUrl: HttpUrl) extends OkHttpClient {
+class Client(baseUrl: Uri) {
 
-  val client: OkHttpClient = new OkHttpClient()
+  implicit val system = ActorSystem()
 
-  def get[T: JsonReader](
-      httpUrl: String): CompletableFuture[Either[IOException, Option[T]]] = {
-    makeRequest[T](httpUrl)
-      .thenApply((either: Either[IOException, Option[String]]) =>
-        either.right.map(opt =>
-          opt.map(jsValue => jsValue.parseJson.convertTo[T])))
+  implicit val materializer = ActorMaterializer()
+
+  implicit val executionContext = system.dispatcher
+
+  def get[T: Decoder](path: Path): Future[Either[HttpResponse, Option[T]]] = {
+    makeRequest(path)
+      .map((either: Either[HttpResponse, Option[String]]) =>
+        either.right.map(opt => opt.map(decode[T]).flatMap(_.toOption)))
   }
 
-  def getMany[T: JsonReader](httpUrl: String)
-    : CompletableFuture[Either[IOException, Option[List[T]]]] = {
-    makeRequest[T](httpUrl)
-      .thenApply((either: Either[IOException, Option[String]]) =>
+  def getMany[T: Decoder](
+      path: Path): Future[Either[HttpResponse, Option[List[T]]]] = {
+    makeRequest(path)
+      .map((either: Either[HttpResponse, Option[String]]) =>
         either.right.map[Option[List[T]]](opt =>
           opt.map(jsValue => {
-            jsValue.parseJson match {
-              case JsArray(elements) => elements.map(_.convertTo[T]).toList
-              case _                 => Nil
+            parse(jsValue) match {
+              case Right(json) =>
+                json.arrayOrObject(
+                  Nil,
+                  el =>
+                    el.flatMap(e => decode[T](e.toString()).toOption).toList,
+                  _ => Nil)
+              case _ => Nil
             }
           })))
   }
 
-  private def makeRequest[T: JsonReader](
-      url: String): CompletableFuture[Either[IOException, Option[String]]] = {
+  private def makeRequest(
+      path: Path): Future[Either[HttpResponse, Option[String]]] = {
 
-    val path = httpUrl.newBuilder().addEncodedPathSegments(url).build()
-
-    val request = new Request.Builder()
-      .url(path)
-      .build()
-
-    val call = client.newCall(request)
-    val result = new OkHttpClientResponseFuture()
-    call.enqueue(result)
-
-    result.future.thenApply[Either[IOException, Option[String]]](
-      (either: Either[IOException, Option[Response]]) => {
-
-        either.right
-          .map(v => v.map(r => r.body().string()))
-
-      })
+    val responseFuture =
+      Http().singleRequest(model.HttpRequest(uri = baseUrl.withPath(path)))
+    responseFuture.map {
+      case HttpResponse(StatusCodes.OK, _, entity, _) =>
+        Right(Some(entity.toString()))
+      case resp @ HttpResponse(_, _, _, _) => Left(resp)
+    }
   }
 
 }

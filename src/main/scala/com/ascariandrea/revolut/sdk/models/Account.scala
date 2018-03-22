@@ -1,9 +1,6 @@
 package com.ascariandrea.revolut.sdk
 package models
 
-import spray.json.RootJsonFormat
-import spray.json.DefaultJsonProtocol._
-
 case class Account(
     id: String,
     name: String,
@@ -15,7 +12,10 @@ case class Account(
     updated_at: String,
     `type`: String
 )
+import io.circe._
+import io.circe.generic.semiauto._
 
 object Account {
-  implicit val format: RootJsonFormat[Account] = jsonFormat9(Account.apply)
+  // also works inlined
+  implicit val decoderImplicit: Decoder[Account] = deriveDecoder
 }
