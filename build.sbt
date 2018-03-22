@@ -24,14 +24,24 @@ lazy val commonSettings = Seq(
   (compile in Test) := { (compile in Test) dependsOn (scalastyle in Test).toTask("") }.value
 )
 
+val circeVersion = "0.9.1"
+
+resolvers += "btomala at bintray" at "https://dl.bintray.com/btomala/maven/"
+
 val root = project.in(file("."))
   .settings(
     name := "revolut-sdk",
     libraryDependencies ++= Seq(
       "com.google.code.findbugs" % "jsr305" % "1.3.9",
-      "com.squareup.okhttp3" % "okhttp" % "3.9.1",
-      "io.spray" %% "spray-json" % "1.3.2"
-    ) ++ Seq(
+      "com.typesafe.akka" %% "akka-http"   % "10.1.0",
+      "com.typesafe.akka" %% "akka-stream" % "2.5.11"
+    )
+    ++ Seq(
+      "io.circe" %% "circe-core",
+      "io.circe" %% "circe-generic",
+      "io.circe" %% "circe-parser"
+    ).map(_ % circeVersion)
+    ++ Seq(
       "org.scalatest" %% "scalatest" % "3.0.5",
       "com.squareup.okhttp3" % "mockwebserver" % "3.10.0"
     ).map( _ % Test)
