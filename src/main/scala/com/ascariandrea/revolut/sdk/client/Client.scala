@@ -28,19 +28,10 @@ class Client(baseUrl: Uri) {
   def getMany[T: Decoder](
       path: Path): Future[Either[HttpResponse, Option[List[T]]]] = {
     makeRequest(path)
-      .map((either: Either[HttpResponse, Option[String]]) =>
-        either.right.map[Option[List[T]]](opt =>
-          opt.map(jsValue => {
-            parse(jsValue) match {
-              case Right(json) =>
-                json.arrayOrObject(
-                  Nil,
-                  el =>
-                    el.flatMap(e => decode[T](e.toString()).toOption).toList,
-                  _ => Nil)
-              case _ => Nil
-            }
-          })))
+      .map(
+        (either: Either[HttpResponse, Option[String]]) =>
+          either.right
+            .map(json => json.map(decode[List[T]]).flatMap(_.toOption)))
   }
 
   private def makeRequest(
