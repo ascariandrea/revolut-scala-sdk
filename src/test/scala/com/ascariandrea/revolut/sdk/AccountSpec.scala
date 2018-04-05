@@ -27,7 +27,7 @@ class AccountSpec
     server.shutdown()
   }
 
-  it should "get all account" in {
+  it should "get all accounts" in {
     accountClient.getAll().map { result =>
       {
         result should be('right)

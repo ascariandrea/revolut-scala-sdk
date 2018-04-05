@@ -1,3 +1,6 @@
+resolvers += "btomala at bintray" at "https://dl.bintray.com/btomala/maven/"
+resolvers += Resolver.sonatypeRepo("releases")
+
 lazy val commonSettings = Seq(
   organization := "com.ascariandrea.revolut.sdk",
   developers:= List(
@@ -26,8 +29,6 @@ lazy val commonSettings = Seq(
 
 val circeVersion = "0.9.1"
 
-resolvers += "btomala at bintray" at "https://dl.bintray.com/btomala/maven/"
-
 val root = project.in(file("."))
   .settings(
     name := "revolut-sdk",
@@ -43,7 +44,8 @@ val root = project.in(file("."))
     ).map(_ % circeVersion)
     ++ Seq(
       "org.scalatest" %% "scalatest" % "3.0.5",
-      "com.squareup.okhttp3" % "mockwebserver" % "3.10.0"
+      "com.squareup.okhttp3" % "mockwebserver" % "3.10.0",
+      "com.danielasfregola" %% "random-data-generator" % "2.4"
     ).map( _ % Test)
   )
   .settings(commonSettings)
