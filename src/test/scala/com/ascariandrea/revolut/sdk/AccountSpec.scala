@@ -16,7 +16,7 @@ class AccountSpec
     with ScalaFutures {
 
   val server: MockWebServer = MockRevolutServer()
-  var accountClient: Accounts = null
+  var accountClient: Accounts = _
 
   override protected def beforeAll(): Unit = {
     server.start()
@@ -48,7 +48,7 @@ class AccountSpec
             100.0,
             "GBP",
             "active",
-            false,
+            public = false,
             "2017-06-01T11:11:11.0Z",
             "2017-06-01T11:11:11.0Z",
             "pocket"
