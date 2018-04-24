@@ -8,7 +8,7 @@ import scala.concurrent.Future
 
 class Counterparties(val client: Client) {
 
-  def getAll: Future[Either[HttpResponse, Option[List[Counterparty]]]] = {
+  def getAll(): Future[Either[HttpResponse, Option[List[Counterparty]]]] = {
     client.getMany[Counterparty](Path("/counterparties"))
   }
 

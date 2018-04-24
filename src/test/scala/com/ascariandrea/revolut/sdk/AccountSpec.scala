@@ -25,7 +25,7 @@ class AccountSpec
     server.shutdown()
   }
 
-  test("get all accounts") {
+  test("Get all accounts") {
     accountClient.getAll map { result =>
       assert(server.takeRequest().getPath == "/api/accounts")
       result shouldBe a[Right[_, _]]
@@ -35,8 +35,7 @@ class AccountSpec
     }
   }
 
-  test("get an account") {
-
+  test("Get an account") {
     accountClient.get("42") map { result =>
       assert(server.takeRequest().getPath == "/api/accounts/42")
       result shouldBe a[Right[_, _]]

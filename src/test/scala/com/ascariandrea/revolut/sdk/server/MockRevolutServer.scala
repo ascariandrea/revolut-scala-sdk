@@ -17,12 +17,9 @@ object MockRevolutServer {
   private val accounts = random[Account](10).toList.asJson.toString()
 
   private val counterparty =
-    random[Counterparty].asJson(Counterparty.counterpartyEncoder).toString()
+    random[Counterparty].asJson.toString()
 
-  private val counterparties = random[Counterparty](10)
-    .map(c => c.asJson(Counterparty.counterpartyEncoder))
-    .toList
-    .toString()
+  private val counterparties = random[Counterparty](10).toList.asJson.toString()
 
   def create(): MockWebServer = {
     val server: MockWebServer = new MockWebServer()

@@ -2,15 +2,11 @@ package com.ascariandrea.revolut.sdk
 package client
 
 import akka.actor.ActorSystem
-import akka.http.javadsl.model.ContentType
-import akka.http.javadsl.server.PathMatchers
-import akka.http.scaladsl.model.ContentType.WithFixedCharset
 import akka.http.scaladsl.model.Uri.Path
 import akka.http.scaladsl.model.{HttpResponse, StatusCodes, Uri}
 import akka.http.scaladsl.{Http, model}
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
-import akka.util.ByteString
 import io.circe.Decoder
 
 import scala.concurrent.{ExecutionContextExecutor, Future}

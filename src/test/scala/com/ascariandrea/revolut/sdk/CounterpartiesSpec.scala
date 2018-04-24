@@ -1,9 +1,8 @@
 package com.ascariandrea.revolut.sdk
 
 import akka.http.scaladsl.model.Uri
-import akka.http.scaladsl.model.Uri.Path
 import com.ascariandrea.revolut.sdk.client.Client
-import com.ascariandrea.revolut.sdk.models.{Account, Counterparty}
+import com.ascariandrea.revolut.sdk.models.Counterparty
 import com.ascariandrea.revolut.sdk.test.MockRevolutServer
 import okhttp3.mockwebserver.MockWebServer
 import org.scalatest.{AsyncFunSuite, BeforeAndAfterAll, Matchers}
