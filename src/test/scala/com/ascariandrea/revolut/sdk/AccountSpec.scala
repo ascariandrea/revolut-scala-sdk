@@ -3,7 +3,7 @@ package com.ascariandrea.revolut.sdk
 import akka.http.scaladsl.model.Uri
 import com.ascariandrea.revolut.sdk.client.Client
 import com.ascariandrea.revolut.sdk.models.Account
-import com.ascariandrea.revolut.sdk.test.MockRevolutServer
+import com.ascariandrea.revolut.sdk.server.MockRevolutServer
 import okhttp3.mockwebserver.MockWebServer
 import org.scalatest.{Assertions, AsyncFunSuite, BeforeAndAfterAll, Matchers}
 

@@ -3,7 +3,7 @@ package com.ascariandrea.revolut.sdk
 import akka.http.scaladsl.model.Uri
 import com.ascariandrea.revolut.sdk.client.Client
 import com.ascariandrea.revolut.sdk.models.{Counterparty, CounterpartyData}
-import com.ascariandrea.revolut.sdk.test.MockRevolutServer
+import com.ascariandrea.revolut.sdk.server.MockRevolutServer
 import okhttp3.mockwebserver.MockWebServer
 import org.scalatest.{Assertions, AsyncFunSuite, BeforeAndAfterAll, Matchers}
 import com.danielasfregola.randomdatagenerator.RandomDataGenerator._
@@ -56,6 +56,14 @@ class CounterpartiesSpec
       result shouldBe a[Right[_, _]]
       result.right.get shouldBe a[Some[_]]
       result.right.get.get shouldBe a[Counterparty]
+    }
+  }
+
+  test("delete a counteparty") {
+    client.delete("42") map { result =>
+      result shouldBe a[Right[_, _]]
+      result.right.get shouldBe a[java.lang.Boolean]
+      result.right.get shouldBe true
     }
   }
 }

@@ -1,6 +1,4 @@
-
 package com.ascariandrea.revolut.sdk
-package test
 
 import com.ascariandrea.revolut.sdk.models.Config
 import org.scalatest._
