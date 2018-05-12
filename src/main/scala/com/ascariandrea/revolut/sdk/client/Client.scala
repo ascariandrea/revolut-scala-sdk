@@ -3,13 +3,7 @@ package client
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri.Path
-import akka.http.scaladsl.model.{
-  HttpResponse,
-  StatusCodes,
-  Uri,
-  HttpEntity,
-  ContentTypes
-}
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.{Http, model}
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
@@ -44,6 +38,12 @@ class Client(val baseUrl: Uri) {
       .map(serialize[T])
   }
 
+  def delete(
+      path: Path
+  ): Future[Either[HttpResponse, Boolean]] =
+    makeRequest(path, model.HttpMethods.DELETE, None)
+      .map(r => r.map(_ => true))
+
   private def makeRequest(
       path: Path,
       method: model.HttpMethod,
@@ -57,17 +57,20 @@ class Client(val baseUrl: Uri) {
     Http()
       .singleRequest(
         model.HttpRequest(
-          uri = requestUri,
-          method = method,
-          entity = data
-            .map(d => {
-              HttpEntity(ContentTypes.`application/json`, d.toString())
-            })
+          method,
+          requestUri,
+          Nil,
+          data
+            .map(d => HttpEntity(ContentTypes.`application/json`, d.toString()))
             .getOrElse(HttpEntity.empty(ContentTypes.`application/json`))
         )
       )
       .flatMap {
-        case HttpResponse(StatusCodes.OK | StatusCodes.Created, _, entity, _) =>
+        case HttpResponse(StatusCodes.OK | StatusCodes.Created |
+                          StatusCodes.NoContent,
+                          _,
+                          entity,
+                          _) =>
           Unmarshal(entity).to[String].map(s => Right(Some(s)))
 
         case resp @ HttpResponse(_, _, _, _) => Future.apply(Left(resp))
@@ -75,7 +78,8 @@ class Client(val baseUrl: Uri) {
   }
 
   private def serialize[T: Decoder](
-      either: Either[HttpResponse, Option[String]]) =
+      either: Either[HttpResponse, Option[String]])
+    : Either[HttpResponse, Option[T]] =
     either.right.map(json => json.map(decode[T]).flatMap(_.toOption))
 
 }
