@@ -4,13 +4,15 @@ import akka.http.scaladsl.model.Uri
 import akka.http.scaladsl.model.Uri.Path
 import models.Config
 import client.Client
+import com.typesafe.config.ConfigFactory
 
 class RevolutSDK(config: Config) {
 
+  val resources = ConfigFactory.load().getConfig("revolut")
+
   val version: String = "1.0"
   val host: String =
-    if (config.sandbox) "sandbox-b2b.revolut.com"
-    else "b2b.revolut.com"
+    resources.getString(if (config.sandbox) "sandbox" else "live")
 
   val baseUrl: Uri = Uri(host).withScheme("https").withPath(Path("/api"))
 
