@@ -98,7 +98,7 @@ class PaymentSpec
 
   test("get a list of transactions") {
     val transactionParams = random[TransactionsParams]
-    client.transactions(transactionParams).map { result =>
+    client.transactions(Some(transactionParams)).map { result =>
       val req = server.takeRequest()
 
       assert(req.getMethod == "GET")

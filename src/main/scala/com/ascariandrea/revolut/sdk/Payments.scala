@@ -30,18 +30,24 @@ class Payments(val client: Client) {
   def cancel(transactionId: String): Future[Either[HttpResponse, Boolean]] =
     client.delete(Slash(Path("transaction") / transactionId))
 
-  def transactions(params: TransactionsParams)
-    : Future[Either[HttpResponse, Option[List[Transaction]]]] =
+  def transactions(params: Option[TransactionsParams])
+    : Future[Either[HttpResponse, Option[List[Transaction]]]] = {
+
+    val paramsMap = params
+      .fold(Map.empty[String, String])(
+        p =>
+          Map[String, Option[String]](
+            "`type`" -> p.`type`,
+            "counterparty" -> p.counterparty,
+            "from" -> p.from.map(d => d.toString),
+            "to" -> p.to.map(d => d.toString)
+          ).filter(e => e._2.isDefined)
+            .mapValues(sOpt => sOpt.get))
+
     client.getMany[Transaction](
       Slash(Path("transactions")),
-      Query(
-        Map[String, Option[String]](
-          "`type`" -> params.`type`,
-          "counterparty" -> params.counterparty,
-          "from" -> params.from.map(d => d.toString),
-          "to" -> params.to.map(d => d.toString)
-        ).filter(e => e._2.isDefined)
-          .mapValues(sOpt => sOpt.get)
-      )
+      Query(paramsMap)
     )
+  }
+
 }
