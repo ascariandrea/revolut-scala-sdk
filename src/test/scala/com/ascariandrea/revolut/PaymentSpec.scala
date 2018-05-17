@@ -1,9 +1,9 @@
-package com.ascariandrea.revolut.sdk
+package com.ascariandrea.revolut
 
 import akka.http.scaladsl.model.Uri
-import com.ascariandrea.revolut.sdk.client.Client
-import com.ascariandrea.revolut.sdk.models._
-import com.ascariandrea.revolut.sdk.server.MockRevolutServer
+import com.ascariandrea.revolut.client.Client
+import com.ascariandrea.revolut.models._
+import com.ascariandrea.revolut.server.MockRevolutServer
 import okhttp3.mockwebserver.MockWebServer
 import org.scalatest.{Assertions, AsyncFunSuite, BeforeAndAfterAll, Matchers}
 import com.danielasfregola.randomdatagenerator.RandomDataGenerator._

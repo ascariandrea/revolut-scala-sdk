@@ -1,10 +1,10 @@
-package com.ascariandrea.revolut.sdk
+package com.ascariandrea.revolut
 
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.Uri.{Path, Query}
 import akka.http.scaladsl.model.Uri.Path.Slash
-import com.ascariandrea.revolut.sdk.client.Client
-import com.ascariandrea.revolut.sdk.models._
+import com.ascariandrea.revolut.client.Client
+import com.ascariandrea.revolut.models._
 import io.circe.syntax._
 import scala.concurrent.Future
 

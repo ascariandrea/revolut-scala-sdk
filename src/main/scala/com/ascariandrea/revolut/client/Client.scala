@@ -1,5 +1,4 @@
-package com.ascariandrea.revolut.sdk
-package client
+package com.ascariandrea.revolut.client
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri.{Path, Query}

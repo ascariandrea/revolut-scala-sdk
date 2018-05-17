@@ -1,10 +1,10 @@
-package com.ascariandrea.revolut.sdk
+package com.ascariandrea.revolut
 
-import com.ascariandrea.revolut.sdk.models.{Counterparty, CounterpartyData}
+import com.ascariandrea.revolut.models.{Counterparty, CounterpartyData}
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.Uri.{Path, Query}
 import akka.http.scaladsl.model.Uri.Path.Slash
-import com.ascariandrea.revolut.sdk.client.Client
+import com.ascariandrea.revolut.client.Client
 import scala.concurrent.Future
 import io.circe.syntax._
 

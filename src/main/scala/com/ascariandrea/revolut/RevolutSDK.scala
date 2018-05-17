@@ -1,4 +1,4 @@
-package com.ascariandrea.revolut.sdk
+package com.ascariandrea.revolut
 
 import akka.http.scaladsl.model.Uri
 import akka.http.scaladsl.model.Uri.Path

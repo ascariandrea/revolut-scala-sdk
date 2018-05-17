@@ -1,6 +1,6 @@
-package com.ascariandrea.revolut.sdk
+package com.ascariandrea.revolut
 
-import com.ascariandrea.revolut.sdk.models.Config
+import com.ascariandrea.revolut.models.Config
 import org.scalatest._
 
 class RevolutSDKSpec extends FlatSpec with Matchers {

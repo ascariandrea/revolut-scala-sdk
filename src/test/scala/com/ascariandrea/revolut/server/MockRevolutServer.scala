@@ -1,8 +1,8 @@
-package com.ascariandrea.revolut.sdk.server
+package com.ascariandrea.revolut.server
 
 import java.nio.charset.Charset
 
-import com.ascariandrea.revolut.sdk.models._
+import com.ascariandrea.revolut.models._
 import okhttp3.mockwebserver.{
   Dispatcher,
   MockResponse,
