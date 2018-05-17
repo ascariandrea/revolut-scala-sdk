@@ -1,5 +1,4 @@
-package com.ascariandrea.revolut.sdk
-package models
+package com.ascariandrea.revolut.sdk.models
 
 import io.circe.generic.JsonCodec
 

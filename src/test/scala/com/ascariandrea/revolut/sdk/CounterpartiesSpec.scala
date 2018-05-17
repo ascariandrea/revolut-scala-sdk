@@ -43,7 +43,11 @@ class CounterpartiesSpec
 
   test("get all counterparties") {
     client.getAll() map { result =>
-      assert(server.takeRequest().getPath == "/api/counterparties")
+      val req = server.takeRequest()
+
+      assert(req.getMethod == "GET")
+      assert(req.getPath == "/api/counterparties")
+
       result shouldBe a[Right[_, _]]
       result.right.get shouldBe a[Some[_]]
       result.right.get.get shouldBe a[List[_]]

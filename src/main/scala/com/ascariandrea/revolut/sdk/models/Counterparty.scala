@@ -1,9 +1,8 @@
-package com.ascariandrea.revolut.sdk
-package models
+package com.ascariandrea.revolut.sdk.models
 
 import io.buildo.enumero.annotations.enum
+import io.circe.generic.JsonCodec
 import io.buildo.enumero.circe._
-import io.circe.generic.{JsonCodec}
 
 @enum trait ProfileType {
   business
@@ -15,7 +14,7 @@ import io.circe.generic.{JsonCodec}
   deleted
 }
 
-@enum trait Type {
+@enum trait CounterpartyType {
   revolut
   external
 }
@@ -28,7 +27,7 @@ import io.circe.generic.{JsonCodec}
     profile_type: ProfileType,
     country: String,
     state: String,
-    `type`: Type,
+    `type`: CounterpartyType,
     created_at: String,
     updated_at: String,
     accounts: List[Account]

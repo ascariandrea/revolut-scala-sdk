@@ -1,7 +1,8 @@
 package com.ascariandrea.revolut.sdk.server
 
 import java.nio.charset.Charset
-import com.ascariandrea.revolut.sdk.models.{Account, Counterparty}
+
+import com.ascariandrea.revolut.sdk.models._
 import okhttp3.mockwebserver.{
   Dispatcher,
   MockResponse,
@@ -22,57 +23,63 @@ object MockRevolutServer {
   private val counterparty = random[Counterparty].asJson
   private val counterparties = random[Counterparty](10).toList.asJson
 
+  private val payment = random[Payment].asJson
+
+  private val transfer = random[Transfer].asJson
+
+  private val transaction = random[Transaction].asJson
+  private val transactions = random[Transaction](10).toList.asJson
+
   def create(): MockWebServer = {
     val server: MockWebServer = new MockWebServer()
     server.setDispatcher(new Dispatcher {
       override def dispatch(request: RecordedRequest): MockResponse = {
-        val path = request.getPath
+        val requestUrl = request.getRequestUrl.encodedPath()
 
         request.getMethod match {
           case "GET" => {
-            path match {
-              case "/api/accounts" =>
-                new MockResponse()
-                  .setResponseCode(200)
-                  .setBody(accounts.toString())
-              case "/api/accounts/42" =>
-                new MockResponse()
-                  .setResponseCode(200)
-                  .setBody(account.toString())
-              case "/api/counterparty/42" =>
-                new MockResponse()
-                  .setResponseCode(200)
-                  .setBody(counterparty.toString())
-              case "/api/counterparties" =>
-                new MockResponse()
-                  .setResponseCode(200)
-                  .setBody(counterparties.toString())
-            }
+            new MockResponse()
+              .setResponseCode(200)
+              .setBody((requestUrl match {
+                case "/api/accounts"        => accounts
+                case "/api/accounts/42"     => account
+                case "/api/counterparty/42" => counterparty
+                case "/api/counterparties"  => counterparties
+                case "/api/transaction/42"  => transaction
+                case "/api/transactions"    => transactions
+              }).toString())
+
           }
           case "POST" => {
-            path match {
-              case "/api/counterparty" => {
+            val payload = parse(
+              request.getBody.readString(Charset.defaultCharset())).toOption
+              .getOrElse(
+                JsonObject.empty.asJson
+              )
+            new MockResponse()
+              .setResponseCode(201)
+              .setBody((
+                requestUrl match {
+                  case "/api/counterparty" =>
+                    counterparty.deepMerge(payload)
 
-                val counterpartyData =
-                  parse(request.getBody.readString(Charset.defaultCharset())).toOption
-                    .getOrElse(
-                      JsonObject.empty.asJson
-                    )
+                  case "/api/transfer" =>
+                    transfer.deepMerge(payload)
 
-                new MockResponse()
-                  .setResponseCode(201)
-                  .setBody(counterparty.deepMerge(counterpartyData).toString())
-              }
-            }
+                  case "/api/pay" =>
+                    payment.deepMerge(payload)
+                }
+              ).toString())
 
           }
 
-          case "DELETE" => {
-            path match {
-              case "/api/counterparty/42" =>
-                new MockResponse().setResponseCode(204)
-            }
-          }
+          case "DELETE" =>
+            new MockResponse().setResponseCode(requestUrl match {
+              case "/api/counterparty/42" => 204
+              case "/api/transaction/42"  => 204
+              case _                      => 404
+            })
+
           case _ => new MockResponse().setResponseCode(404).setBody("not found")
         }
 

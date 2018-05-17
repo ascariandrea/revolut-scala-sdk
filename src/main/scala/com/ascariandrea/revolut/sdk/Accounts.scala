@@ -15,4 +15,5 @@ class Accounts(val client: Client) {
   def get(id: String): Future[Either[HttpResponse, Option[models.Account]]] = {
     client.get[models.Account](Path("/accounts") / id)
   }
+
 }

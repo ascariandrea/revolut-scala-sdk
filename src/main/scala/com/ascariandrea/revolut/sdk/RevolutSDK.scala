@@ -20,4 +20,5 @@ class RevolutSDK(config: Config) {
 
   val accounts = new Accounts(this.client)
   val counterparties = new Counterparties(this.client)
+  val payments = new Payments(this.client)
 }
