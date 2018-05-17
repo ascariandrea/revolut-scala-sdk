@@ -17,7 +17,7 @@ import io.circe.{Decoder, Json}
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import io.circe.parser._
 
-class Client(val baseUrl: Uri) {
+class Client(val baseUrl: Uri, val apiKey: String) {
 
   implicit val system: ActorSystem = ActorSystem()
 

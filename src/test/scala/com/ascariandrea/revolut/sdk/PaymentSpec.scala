@@ -20,7 +20,7 @@ class PaymentSpec
   override protected def beforeAll(): Unit = {
     server.start()
     client = new Payments(
-      new Client(Uri(server.url("/api").toString))
+      new Client(Uri(server.url("/api").toString), "api-key")
     )
   }
 
