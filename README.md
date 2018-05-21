@@ -7,6 +7,12 @@ A SDK for revolut API written in Scala.
 
 ## Usage
 
+Add bintray resolver to `build.sbt`
+
+```scala
+resolvers += "buildo at bintray" at "https://dl.bintray.com/buildo/maven"
+```
+
 ```scala
 import com.ascariandrea.revolut.sdk
 ...
