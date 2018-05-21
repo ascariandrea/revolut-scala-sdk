@@ -1,28 +1,30 @@
 package com.ascariandrea.revolut.client
 
 import akka.actor.ActorSystem
+import akka.http.scaladsl.model.HttpHeader.ParsingResult.{Ok, Error}
 import akka.http.scaladsl.model.Uri.{Path, Query}
-import akka.http.scaladsl.model.{
-  Uri,
-  HttpResponse,
-  HttpEntity,
-  ContentTypes,
-  StatusCodes
-}
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.{Http, model}
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
 import io.circe.{Decoder, Json}
+
 import scala.concurrent.{ExecutionContextExecutor, Future}
 import io.circe.parser._
 
-class Client(val baseUrl: Uri) {
+class Client(val baseUrl: Uri, val apiKey: String) {
 
   implicit val system: ActorSystem = ActorSystem()
 
   implicit val materializer: ActorMaterializer = ActorMaterializer()
 
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
+
+  val authorizationHeader: Option[HttpHeader] =
+    HttpHeader.parse("Authorization", s"Bearer $apiKey") match {
+      case Ok(header, _) => Some(header)
+      case Error(_)      => None
+    }
 
   def get[T: Decoder](path: Path): Future[Either[HttpResponse, Option[T]]] =
     get(path, Query.Empty)
@@ -66,12 +68,14 @@ class Client(val baseUrl: Uri) {
         .withQuery(query)
         .toString())
 
+    // build headers for request
+
     Http()
       .singleRequest(
         model.HttpRequest(
           method,
           requestUri,
-          Nil,
+          authorizationHeader.fold(List.empty[HttpHeader])(h => List(h)),
           data
             .map(d => HttpEntity(ContentTypes.`application/json`, d.toString()))
             .getOrElse(HttpEntity.empty(ContentTypes.`application/json`))

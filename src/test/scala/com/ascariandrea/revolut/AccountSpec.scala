@@ -18,7 +18,8 @@ class AccountSpec
 
   override protected def beforeAll(): Unit = {
     server.start()
-    accountClient = new Accounts(new Client(Uri(server.url("/api").toString)))
+    accountClient = new Accounts(
+      new Client(Uri(server.url("/api").toString), "api-key"))
   }
 
   override protected def afterAll(): Unit = {
