@@ -86,6 +86,7 @@ object MockRevolutServer {
 
       }
     })
+
     server
   }
 }

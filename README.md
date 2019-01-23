@@ -1,7 +1,7 @@
 # Revolut SDK
 
 [![CircleCI](https://circleci.com/gh/ascariandrea/revolut-scala-sdk.svg?style=svg)](https://circleci.com/gh/ascariandrea/revolut-scala-sdk)
-[![npm version](https://badge.fury.io/js/revolut-sdk.svg)](https://badge.fury.io/js/revolut-sdk)
+[![Download](https://api.bintray.com/packages/ascariandrea/maven/revolut/images/download.svg?version=0.1.1-SNAPSHOT) ](https://bintray.com/ascariandrea/maven/revolut/0.1.1/link)
 
 A SDK for revolut API written in Scala.
 
@@ -10,11 +10,11 @@ A SDK for revolut API written in Scala.
 Add bintray resolver to `build.sbt`
 
 ```scala
-resolvers += "buildo at bintray" at "https://dl.bintray.com/buildo/maven"
+resolvers += "ascariandrea at bintray" at "https://dl.bintray.com/ascariandrea/maven"
 ```
 
 ```scala
-import com.ascariandrea.revolut.sdk
+import com.ascariandrea.revolut.Revolut
 ...
 
 val revolut = new Revolut(sandbox = true, apiKey = "your-api-key")
