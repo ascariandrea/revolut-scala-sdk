@@ -1,12 +1,13 @@
 package com.ascariandrea.revolut
+package test
 
 import akka.http.scaladsl.model.Uri
 import com.ascariandrea.revolut.client.Client
+import com.danielasfregola.randomdatagenerator.RandomDataGenerator._
 import com.ascariandrea.revolut.models.{Counterparty, CounterpartyData}
-import com.ascariandrea.revolut.server.MockRevolutServer
 import okhttp3.mockwebserver.MockWebServer
 import org.scalatest.{Assertions, AsyncFunSuite, BeforeAndAfterAll, Matchers}
-import com.danielasfregola.randomdatagenerator.RandomDataGenerator._
+import server.MockRevolutServer
 
 class CounterpartiesSpec
     extends AsyncFunSuite

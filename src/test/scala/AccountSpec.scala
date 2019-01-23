@@ -1,11 +1,13 @@
 package com.ascariandrea.revolut
+package test
 
 import akka.http.scaladsl.model.Uri
+import com.ascariandrea.revolut.Accounts
 import com.ascariandrea.revolut.client.Client
 import com.ascariandrea.revolut.models.Account
-import com.ascariandrea.revolut.server.MockRevolutServer
 import okhttp3.mockwebserver.MockWebServer
 import org.scalatest.{Assertions, AsyncFunSuite, BeforeAndAfterAll, Matchers}
+import server.MockRevolutServer
 
 class AccountSpec
     extends AsyncFunSuite

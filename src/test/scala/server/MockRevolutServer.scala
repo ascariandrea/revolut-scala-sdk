@@ -1,4 +1,5 @@
-package com.ascariandrea.revolut.server
+package com.ascariandrea.revolut.test
+package server
 
 import java.nio.charset.Charset
 
@@ -85,6 +86,7 @@ object MockRevolutServer {
 
       }
     })
+
     server
   }
 }

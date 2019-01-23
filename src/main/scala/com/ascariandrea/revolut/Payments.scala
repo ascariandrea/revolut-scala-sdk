@@ -1,11 +1,12 @@
 package com.ascariandrea.revolut
 
 import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.model.Uri.{Path, Query}
 import akka.http.scaladsl.model.Uri.Path.Slash
-import com.ascariandrea.revolut.client.Client
-import com.ascariandrea.revolut.models._
+import akka.http.scaladsl.model.Uri.{Path, Query}
 import io.circe.syntax._
+import client.Client
+import models._
+
 import scala.concurrent.Future
 
 class Payments(val client: Client) {
