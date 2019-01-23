@@ -1,12 +1,13 @@
 package com.ascariandrea.revolut
 
-import com.ascariandrea.revolut.models.{Counterparty, CounterpartyData}
 import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.model.Uri.{Path, Query}
 import akka.http.scaladsl.model.Uri.Path.Slash
-import com.ascariandrea.revolut.client.Client
-import scala.concurrent.Future
+import akka.http.scaladsl.model.Uri.{Path, Query}
 import io.circe.syntax._
+import client.Client
+import models.{Counterparty, CounterpartyData}
+
+import scala.concurrent.Future
 
 class Counterparties(val client: Client) {
 

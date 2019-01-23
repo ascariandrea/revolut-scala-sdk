@@ -1,12 +1,20 @@
 package com.ascariandrea.revolut
+package test
 
 import akka.http.scaladsl.model.Uri
 import com.ascariandrea.revolut.client.Client
-import com.ascariandrea.revolut.models._
-import com.ascariandrea.revolut.server.MockRevolutServer
+import com.danielasfregola.randomdatagenerator.RandomDataGenerator._
+import com.ascariandrea.revolut.models.{
+  Payment,
+  PaymentData,
+  Transaction,
+  TransactionsParams,
+  Transfer,
+  TransferData
+}
 import okhttp3.mockwebserver.MockWebServer
 import org.scalatest.{Assertions, AsyncFunSuite, BeforeAndAfterAll, Matchers}
-import com.danielasfregola.randomdatagenerator.RandomDataGenerator._
+import server.MockRevolutServer
 
 class PaymentSpec
     extends AsyncFunSuite

@@ -2,7 +2,7 @@ package com.ascariandrea.revolut
 
 import akka.http.scaladsl.model.HttpResponse
 import akka.http.scaladsl.model.Uri.Path
-import com.ascariandrea.revolut.client.Client
+import client.Client
 
 import scala.concurrent.Future
 
