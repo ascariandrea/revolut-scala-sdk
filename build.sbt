@@ -1,8 +1,19 @@
 enablePlugins(GitVersioning)
 
+val ghPackageName = "revolut-sdk-scala"
+
 resolvers += "btomala at bintray" at "https://dl.bintray.com/btomala/maven/"
 resolvers += "buildo at bintray" at "https://dl.bintray.com/buildo/maven"
 resolvers += Resolver.sonatypeRepo("releases")
+
+val pomXML = <developers>
+  <developer>
+    <id>ascariandrea</id>
+    <name>Andrea Ascari</name>
+    <url>github.com/ascariandrea</url>
+  </developer>
+</developers>
+
 
 lazy val commonSettings = Seq(
   organization := "com.ascariandrea",
@@ -12,13 +23,19 @@ lazy val commonSettings = Seq(
               "dev.ascariandrea@gmail.com",
               url("https://github.com/ascariandrea"))
   ),
+  // bintray configs
+  bintrayOrganization := Some("ascariandrea"),
+  bintrayPackageLabels := Seq("revolut", "scala", "sdk"),
+  bintrayVcsUrl := Some(s"git@github.com:ascariandrea/$ghPackageName"),
+  releaseCrossBuild := true,
+  publishMavenStyle := true,
   scalaVersion := "2.12.4",
   crossScalaVersions := Seq("2.11.11", scalaVersion.value),
+  addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
   scalacOptions ++= Seq(
-    "-deprecation",
-    "-feature",
-    "-unchecked",
-    "-Xlint",
+    "-encoding", "utf8",
+    "-deprecation", "-feature", "-unchecked", "-Xlint",
+    "-language:higherKinds",
     "-language:implicitConversions",
     "-language:experimental.macros",
     "-Xfuture",
@@ -27,8 +44,18 @@ lazy val commonSettings = Seq(
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard",
     "-Ywarn-unused",
-    "-Ywarn-unused-import"
+    "-Ywarn-unused-import",
+    "-Yrangepos"
   ),
+  licenses := Seq(
+    "MIT" -> url("http://www.opensource.org/licenses/mit-license.html")),
+  scmInfo := Some(
+    ScmInfo(
+      url(s"https://github.com/ascariandrea/$ghPackageName"),
+      s"scm:git:git@github.com:ascariandrea/$ghPackageName.git"
+    )
+  ),
+  pomExtra := pomXML,
   // Run scalastyle upon compile
   (compile in Compile) := {
     (compile in Compile) dependsOn (scalastyle in Compile).toTask("")
@@ -40,31 +67,11 @@ lazy val commonSettings = Seq(
 
 val circeVersion = "0.9.3"
 
-val root = project
+lazy val root = project
   .in(file("."))
   .settings(
-    organization := "com.ascariandrea",
     name := "revolut",
-    bintrayOrganization := Some("ascariandrea"),
-    bintrayVcsUrl := Some("git@github.com:ascariandrea/revolut-sdk-scala"),
-    licenses := Seq(
-      "MIT" -> url("http://www.opensource.org/licenses/mit-license.html")),
-    scmInfo := Some(
-      ScmInfo(
-        url("https://github.com/ascariandrea/revolut-sdk-scala"),
-        "scm:git:git@github.com:ascariandrea/revout-sdk-scala.git"
-      )
-    ),
-    pomExtra :=
-      <developers>
-        <developer>
-          <id>ascariandrea</id>
-          <name>Andrea Ascari</name>
-          <url>github.com/ascariandrea</url>
-        </developer>
-      </developers>,
-    addCompilerPlugin(
-      "org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+    description := "Revolut SDK",
     libraryDependencies ++= Seq(
       "com.google.code.findbugs" % "jsr305" % "1.3.9",
       "com.typesafe.akka" %% "akka-http" % "10.1.0",
